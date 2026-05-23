@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "mkdir -p dist && cp index.html app.js style.css dist/"
+    "build": "echo 'No build required'"
   },
   "dependencies": {
     "cors": "^2.8.6",
