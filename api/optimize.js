@@ -1,26 +1,3 @@
-import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
-
-// Load .env.local for local development (on Vercel, env vars come from dashboard)
-try {
-    dotenv.config({ path: '.env.local' });
-    const envPath = path.resolve('.env.local');
-    if (fs.existsSync(envPath)) {
-        const envContent = fs.readFileSync(envPath, 'utf8');
-        envContent.split('\n').forEach(line => {
-            const trimmed = line.trim();
-            if (trimmed && !trimmed.startsWith('#')) {
-                const parts = trimmed.split('=');
-                if (parts.length >= 2) {
-                    const key = parts[0].trim();
-                    const value = parts.slice(1).join('=').trim();
-                    if (!process.env[key]) process.env[key] = value;
-                }
-            }
-        });
-    }
-} catch (e) { /* Silently ignore on Vercel */ }
 
 function minutesToTime(minutes) {
     const hrs = Math.floor(minutes / 60);

@@ -1,7 +1,9 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/ai-scheduler/api/$1" },
-    { "source": "/(.*)", "destination": "/ai-scheduler/$1" }
-  ]
+  "functions": {
+    "api/*.js": {
+      "memory": 512,
+      "maxDuration": 30
+    }
+  }
 }
