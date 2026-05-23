@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "functions": {
-    "api/*.js": {
-      "memory": 512,
-      "maxDuration": 30
-    }
-  }
+  "routes": [
+    { "src": "/api/weather-traffic", "dest": "/api/weather-traffic.js" },
+    { "src": "/api/optimize", "dest": "/api/optimize.js" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }

@@ -1,11 +1,12 @@
 {
-  "name": "ai-scheduler",
-  "private": true,
+  "name": "work-root",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo 'No build required'"
   },
   "dependencies": {
     "cors": "^2.8.6",
