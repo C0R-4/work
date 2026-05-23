@@ -1,0 +1,7 @@
+node_modules
+.env.local
+.gemini
+.tempmediaStorage
+*.pdf
+*.docx
+docx_text.txt

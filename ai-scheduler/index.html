@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상황 인식 기반 AI 자동 스케줄링 시스템</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="cpu" class="icon-pulse"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand">CORA</span>
+                    <span class="sub">AI Scheduler</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="nav-item" id="nav-calendar">
+                    <i data-lucide="calendar"></i>
+                    <span>전체 일정 관리</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">JS</div>
+                    <div class="user-info">
+                        <p class="username">김준석 팀장</p>
+                        <p class="role">현장 총괄 관리자</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1>상황 인식 AI 자동 스케줄러</h1>
+                    <p class="subtitle">실시간 외부 환경 데이터를 분석하여 최적의 일정 시나리오를 설계합니다.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="system-time" id="live-time">
+                        2026. 05. 23 (토) 10:52:30
+                    </div>
+                    <button class="btn btn-primary" id="btn-optimize">
+                        <i data-lucide="sparkles"></i>
+                        <span>AI 최적화 실행</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Row 1: Weather & Traffic Status & Control (Now passive and driven strictly by APIs) -->
+                <section class="panel control-panel full-width">
+                    <div class="panel-header">
+                        <h2>
+                            <i data-lucide="wifi" class="panel-icon"></i>
+                            실시간 외부 환경 데이터 현황 (공공 API 연동)
+                        </h2>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span class="badge badge-info" id="api-sync-badge">API 자동 모니터링 중</span>
+                            <button class="btn btn-secondary btn-sm" id="btn-refresh-api" style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 0.8rem; height: auto;">
+                                <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                                <span>실시간 데이터 갱신</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="simulator-controls">
+                        <!-- Weather Status Card -->
+                        <div class="control-card" id-control="weather" style="cursor: default;">
+                            <div class="card-icon weather-icon-container">
+                                <i data-lucide="sun" id="current-weather-icon"></i>
+                            </div>
+                            <div class="card-details">
+                                <span class="label">기상 상태 (기상청 API)</span>
+                                <div style="margin-top: 8px;">
+                                    <span class="badge" id="status-weather-badge" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-blue); font-size: 1rem; padding: 6px 14px;">맑음</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Traffic Status Card -->
+                        <div class="control-card" id-control="traffic" style="cursor: default;">
+                            <div class="card-icon traffic-icon-container">
+                                <i data-lucide="car" id="current-traffic-icon"></i>
+                            </div>
+                            <div class="card-details">
+                                <span class="label">교통량 및 교통 상태 (도로공사 API)</span>
+                                <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+                                    <span class="badge" id="status-traffic-badge" style="background: rgba(0, 230, 118, 0.1); color: var(--accent-green); font-size: 1rem; padding: 6px 14px;">원활</span>
+                                    <span id="status-traffic-count" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">(집계 중...)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Incident Status Card -->
+                        <div class="control-card" id-control="incident" style="cursor: default;">
+                            <div class="card-icon alert-icon-container">
+                                <i data-lucide="shield-alert" id="current-alert-icon"></i>
+                            </div>
+                            <div class="card-details">
+                                <span class="label">특이사항 및 사고 정보</span>
+                                <div style="margin-top: 8px;">
+                                    <span class="badge" id="status-alert-badge" style="background: rgba(255, 61, 0, 0.1); color: var(--accent-red); font-size: 1rem; padding: 6px 14px;">사고 없음</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Row 2: Original vs Adjusted Timeline Comparison -->
+                <section class="panel timeline-panel">
+                    <div class="panel-header">
+                        <h2>
+                            <i data-lucide="calendar-days" class="panel-icon"></i>
+                            기존 스케줄 (정적 계획)
+                        </h2>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="btn btn-primary btn-sm" id="btn-add-task" style="display: flex; align-items: center; gap: 4px; padding: 4px 8px; font-size: 0.8rem; height: auto;">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i>
+                                <span>추가</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="timeline-container" id="original-timeline">
+                        <!-- Dynamic content filled by JS -->
+                    </div>
+                </section>
+
+                <section class="panel timeline-panel highlighted-panel">
+                    <div class="panel-header">
+                        <h2>
+                            <i data-lucide="zap" class="panel-icon icon-sparkle"></i>
+                            AI 조정 스케줄 (상황 반영)
+                        </h2>
+                        <span class="badge badge-success" id="schedule-status-badge">최적화 완료</span>
+                    </div>
+                    <div class="timeline-container" id="adjusted-timeline">
+                        <!-- Dynamic content filled by JS -->
+                    </div>
+                </section>
+
+                <!-- Row 3: AI Explanation & Insights -->
+                <section class="panel report-panel full-width">
+                    <div class="panel-header">
+                        <h2>
+                            <i data-lucide="message-square" class="panel-icon"></i>
+                            AI 스케줄 변경 상세 사유 및 대응 권고안
+                        </h2>
+                    </div>
+                    <div class="report-content-wrapper">
+                        <div class="ai-avatar-area">
+                            <div class="ai-avatar">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+                            <span class="ai-status">CORA AI Engine v1.2</span>
+                        </div>
+                        <div class="ai-explanation" id="ai-explanation-text">
+                            현재 외부 상황이 정상적입니다. 모든 작업이 계획대로 진행될 예정입니다.
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Task Edit/Add Glassmorphism Modal -->
+    <div class="modal-backdrop" id="task-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 30, 0.7); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: rgba(20, 25, 45, 0.85); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 16px; padding: 24px; width: 450px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); color: var(--text-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 12px;">
+                <h3 id="modal-title" style="margin: 0; color: var(--accent-blue); font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="calendar"></i>
+                    <span>스케줄 추가 / 수정</span>
+                </h3>
+                <button id="modal-close" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">&times;</button>
+            </div>
+            
+            <form id="task-form" onsubmit="event.preventDefault();">
+                <input type="hidden" id="task-id">
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">해야할 작업 명칭</label>
+                    <input type="text" id="task-title" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); color: #fff;" placeholder="예: 건설 자재 운송">
+                </div>
+                
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">시작 시간 (HH:MM)</label>
+                        <input type="time" id="task-starttime" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); color: #fff;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">종료 시간 (HH:MM)</label>
+                        <input type="time" id="task-endtime" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); color: #fff;">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">작업 위치</label>
+                    <input type="text" id="task-location" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); color: #fff;" placeholder="예: 강남대로 진입로">
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">작업 유형</label>
+                    <select id="task-type" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); color: #fff;">
+                        <option value="transport">수송 (날씨/교통 민감)</option>
+                        <option value="construction">건설 (날씨 민감)</option>
+                        <option value="outdoor">야외 작업 (고공/강수 금지)</option>
+                        <option value="indoor">실내/기타 작업</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">선행되어야 할 업무 (다중 선택 가능)</label>
+                    <div id="prerequisites-checkboxes-container" style="max-height: 120px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(10, 15, 30, 0.5); display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Checkboxes dynamically rendered by JS -->
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                    <button type="button" id="btn-modal-cancel" class="btn btn-secondary" style="padding: 8px 16px;">취소</button>
+                    <button type="submit" id="btn-modal-save" class="btn btn-primary" style="padding: 8px 16px;">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Glassmorphism Confirm Modal -->
+    <div class="modal-backdrop" id="confirm-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 30, 0.75); backdrop-filter: blur(10px); z-index: 1010; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: rgba(20, 25, 45, 0.9); border: 1px solid rgba(255, 61, 0, 0.3); border-radius: 16px; padding: 24px; width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); color: var(--text-primary); text-align: center;">
+            <div style="color: var(--accent-red); font-size: 3rem; margin-bottom: 16px;">
+                <i data-lucide="alert-triangle" style="width: 48px; height: 48px; margin: 0 auto; display: block;"></i>
+            </div>
+            <h3 style="margin: 0 0 10px 0; color: #fff; font-size: 1.25rem;">스케줄 삭제 확인</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.5;">정말 이 스케줄을 삭제하시겠습니까?<br>삭제 시 종속된 선후행 관계가 자동으로 함께 정리됩니다.</p>
+            <div style="display: flex; justify-content: center; gap: 12px;">
+                <button id="btn-confirm-cancel" class="btn btn-secondary" style="padding: 8px 20px;">취소</button>
+                <button id="btn-confirm-delete" class="btn btn-primary" style="background: linear-gradient(135deg, #ff3d00 0%, #d50000 100%); box-shadow: 0 4px 15px rgba(255, 61, 0, 0.3); color: #fff; padding: 8px 20px;">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+</body>
+</html>
